@@ -1,6 +1,6 @@
 {
   "name": "react-dom-arrow",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "react svg arrow from el to el",
   "main": "index.js",
   "scripts": {

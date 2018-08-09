@@ -1,206 +1,117 @@
-import React, { Component } from 'react';
-const i = 1.618
-class Arrow extends Component {
+'use strict';
 
-    constructor(props) {
-        super(props)
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-        this.tailOffset = this.props.stroke * i * i
-        this.pointerSize = (this.tailOffset * 2) * i
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-        this._init = this._init.bind(this)
-        this._getLineOffset = this._getLineOffset.bind(this)
-        this._getArrow = this._getArrow.bind(this)
-        this._findEl = this._findEl.bind(this)
-        this._getPoint = this._getPoint.bind(this)
-        this._getCurveOffsets = this._getCurveOffsets.bind(this)
+var _react = require('react');
 
-        this.state = {
-            startX: 0,
-            startY: 0,
-            endX: 0,
-            endY: 0,
-            width: 0,
-            height: 0,
-            startCurveOffset: { x: 0, y: 0 },
-            endCurveOffset: { x: 0, y: 0 },
-            endLineOffset: { x: 0, y: 0 },
-            arrow: null,
-        }
-    }
-    componentDidMount() {
-        this._init()
-        window.addEventListener('resize', e => {
-            this._init()
-        }, true)
-        window.addEventListener("scroll", e => {
-            this._init()
-        }, true)
-    }
+var _react2 = _interopRequireDefault(_react);
 
-    _init() {
-        const startEl = this._findEl(this.props.fromSelector)
-        const endEl = this._findEl(this.props.toSelector)
-        if (startEl && endEl) {
-            const startPoint = this._getPoint(startEl, this.props.fromSide)
-            const endPoint = this._getPoint(endEl, this.props.toSide)
-            const startCurveOffset = this._getCurveOffsets(startEl, this.props.fromSide, startPoint, endPoint)
-            const endCurveOffset = this._getCurveOffsets(endEl, this.props.toSide, startPoint, endPoint)
-            const endLineOffset = this._getLineOffset(endPoint, this.props.toSide)
-            const arrow = this._getArrow(endPoint, this.props.toSide)
+require('./App.css');
 
-            if (startPoint && endPoint) {
-                this.setState({
-                    startX: startPoint.x,
-                    startY: startPoint.y,
-                    endX: endPoint.x,
-                    endY: endPoint.y,
-                    width: endPoint.x - startPoint.x,
-                    height: endPoint.y - startPoint.y,
-                    startCurveOffset,
-                    endCurveOffset,
-                    endLineOffset,
-                    arrow
-                })
-            }
-        }
-    }
+var _Arrow = require('./Arrow');
 
+var _Arrow2 = _interopRequireDefault(_Arrow);
 
-    _getLineOffset(endPoint, side) {
-        const S = side ? side : 'top'
-        let x = 0
-        let y = 0
-        switch (S) {
-            case 'top': {
-                y = this.pointerSize
-                return { x, y }
-            }
-            case 'bottom': {
-                y = -this.pointerSize
-                return { x, y }
-            }
-            case 'left': {
-                x = this.pointerSize
-                return { x, y }
-            }
-            case 'right': {
-                x = -this.pointerSize
-                return { x, y }
-            }
-            default: {
-                return null
-            }
-        }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-    }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    _getArrow(endPoint, side) {
-        const S = side ? side : 'top'
-        switch (S) {
-            case 'top': {
-                return `${endPoint.x},${endPoint.y} ${endPoint.x - this.tailOffset},${endPoint.y - this.pointerSize}  ${endPoint.x + this.tailOffset},${endPoint.y - this.pointerSize}`
-            }
-            case 'bottom': {
-                return `${endPoint.x},${endPoint.y} ${endPoint.x - this.tailOffset},${endPoint.y + this.pointerSize}  ${endPoint.x + this.tailOffset},${endPoint.y + this.pointerSize}`
-            }
-            case 'left': {
-                return `${endPoint.x},${endPoint.y} ${endPoint.x - this.pointerSize},${endPoint.y - this.tailOffset} ${endPoint.x - this.pointerSize},${endPoint.y + this.tailOffset}`
-            }
-            case 'right': {
-                return `${endPoint.x},${endPoint.y} ${endPoint.x + this.pointerSize},${endPoint.y - this.tailOffset} ${endPoint.x + this.pointerSize},${endPoint.y + this.tailOffset}`
-            }
-            default: {
-                return null
-            }
-        }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-    }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    _findEl(selector) {
-        return document.querySelector(selector)
-    }
-
-    _getPoint(el, side) {
-        const S = side ? side : 'top'
-        const rect = el.getBoundingClientRect()
-        // console.log('window.scrollY', window.scrollY)
-        switch (S) {
-            case 'top': {
-                const x = rect.x + (rect.width / 2)
-                const y = rect.y
-                return { x, y }
-            }
-            case 'bottom': {
-                const x = rect.x + (rect.width / 2)
-                const y = rect.y + rect.height
-                return { x, y }
-            }
-            case 'left': {
-                const x = rect.x
-                const y = rect.y + (rect.height / 2)
-                return { x, y }
-            }
-            case 'right': {
-                const x = rect.x + rect.width
-                const y = rect.y + (rect.height / 2)
-                return { x, y }
-            }
-            default: {
-                break
-            }
-        }
-
-        return null
-    }
-
-    _getCurveOffsets(el, side, startPoint, endPoint) {
-        const S = side ? side : 'top'
-        let distance = Math.sqrt(Math.pow((endPoint.x - startPoint.x), 2) + Math.pow((endPoint.y - startPoint.y), 2))
-        const curveindex = distance * 0.2
-
-        switch (S) {
-            case 'top': {
-                return { x: 0, y: curveindex }
-            }
-            case 'bottom': {
-                return { x: 0, y: -curveindex }
-            }
-            case 'left': {
-                return { x: curveindex, y: 0 }
-            }
-            case 'right': {
-                return { x: -curveindex, y: 0 }
-            }
-            default: {
-                return { x: 0, y: 0 }
-            }
-        }
-    }
-
-
-    render() {
-        const path = `M${this.state.startX},${this.state.startY}C${this.state.startX - this.state.startCurveOffset.x},${this.state.startY - this.state.startCurveOffset.y} ${this.state.endX - this.state.endCurveOffset.x},${this.state.endY - this.state.endCurveOffset.y} ${this.state.endX - this.state.endLineOffset.x},${this.state.endY - this.state.endLineOffset.y}`
-        return (
-            <svg
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    pointerEvents: 'none'
-                }}
-                width={window.innerWidth}
-                height={window.innerHeight}
-                viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}
-                preserveAspectRatio="none"
-            >
-                <path d={path} stroke={this.props.color ? this.props.color : '#000'} strokeWidth={this.props.stroke} fill="transparent" />
-                <polygon points={this.state.arrow} fill={this.props.color ? this.props.color : '#000'} />
-            </svg>
-        );
-    }
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
 
-export default Arrow
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var App = function (_Component) {
+  _inherits(App, _Component);
+
+  function App(props) {
+    _classCallCheck(this, App);
+
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+    _this.renderBlocks = function () {
+      var blocks = [];
+      var count = getRandomInt(10, 40);
+      for (var index = 0; index < count; index++) {
+        var sides = ['left', 'right', 'top', 'bottom'];
+        var color = getRandomColor();
+        var left = getRandomInt(100, 1500);
+        var top = getRandomInt(100, 700);
+        blocks.push(_react2.default.createElement(
+          'div',
+          {
+            key: 'block' + index,
+            className: 'Block Block' + index,
+            style: {
+              marginLeft: left,
+              marginTop: top,
+              backgroundColor: '' + color
+            }
+          },
+          '' + index
+        ));
+
+        var j = getRandomInt(0, count - 1);
+        if (j !== index) {
+          var fromSide = sides[getRandomInt(0, 3)];
+          var toSide = sides[getRandomInt(0, 3)];
+          blocks.push(_react2.default.createElement(_Arrow2.default, {
+            key: 'Arrow_' + _this.state.i + '_' + index + '_' + j,
+            fromSelector: '.Block' + index,
+            fromSide: fromSide,
+            toSelector: '.Block' + j,
+            toSide: toSide,
+            color: color,
+            stroke: 3
+          }));
+        }
+      }
+      return blocks;
+    };
+
+    _this.state = { i: 0 };
+    return _this;
+  }
+
+  _createClass(App, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      var i = 0;
+      setInterval(function () {
+        i++;
+        _this2.setState({ i: i });
+      }, 2600);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'App' },
+        this.renderBlocks()
+      );
+    }
+  }]);
+
+  return App;
+}(_react.Component);
+
+exports.default = App;
