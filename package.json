@@ -1,0 +1,14 @@
+{
+  "name": "react-dom-arrow",
+  "version": "1.0.0",
+  "description": "react svg arrow from el to el",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sergey Grigorev",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.4.2"
+  }
+}
