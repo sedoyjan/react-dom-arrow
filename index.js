@@ -8,6 +8,13 @@ class Arrow extends Component {
         this.tailOffset = this.props.stroke * i * i
         this.pointerSize = (this.tailOffset * 2) * i
 
+        this._init = this._init.bind(this)
+        this._getLineOffset = this._getLineOffset.bind(this)
+        this._getArrow = this._getArrow.bind(this)
+        this._findEl = this._findEl.bind(this)
+        this._getPoint = this._getPoint.bind(this)
+        this._getCurveOffsets = this._getCurveOffsets.bind(this)
+
         this.state = {
             startX: 0,
             startY: 0,
@@ -31,7 +38,7 @@ class Arrow extends Component {
         }, true)
     }
 
-    _init = () => {
+    _init() {
         const startEl = this._findEl(this.props.fromSelector)
         const endEl = this._findEl(this.props.toSelector)
         if (startEl && endEl) {
@@ -60,7 +67,7 @@ class Arrow extends Component {
     }
 
 
-    _getLineOffset = (endPoint, side) => {
+    _getLineOffset(endPoint, side) {
         const S = side ? side : 'top'
         let x = 0
         let y = 0
@@ -88,7 +95,7 @@ class Arrow extends Component {
 
     }
 
-    _getArrow = (endPoint, side) => {
+    _getArrow(endPoint, side) {
         const S = side ? side : 'top'
         switch (S) {
             case 'top': {
@@ -110,31 +117,33 @@ class Arrow extends Component {
 
     }
 
-    _findEl = (selector) => {
+    _findEl(selector) {
         return document.querySelector(selector)
     }
 
-    _getPoint = (el, side) => {
+    _getPoint(el, side) {
         const S = side ? side : 'top'
+        const rect = el.getBoundingClientRect()
+        // console.log('window.scrollY', window.scrollY)
         switch (S) {
             case 'top': {
-                const x = el.offsetLeft + (el.offsetWidth / 2)
-                const y = el.offsetTop - window.scrollY
+                const x = rect.x + (rect.width / 2)
+                const y = rect.y
                 return { x, y }
             }
             case 'bottom': {
-                const x = el.offsetLeft + (el.offsetWidth / 2)
-                const y = el.offsetTop + el.offsetHeight - window.scrollY
+                const x = rect.x + (rect.width / 2)
+                const y = rect.y + rect.height
                 return { x, y }
             }
             case 'left': {
-                const x = el.offsetLeft
-                const y = el.offsetTop + (el.offsetHeight / 2) - window.scrollY
+                const x = rect.x
+                const y = rect.y + (rect.height / 2)
                 return { x, y }
             }
             case 'right': {
-                const x = el.offsetLeft + el.offsetWidth
-                const y = el.offsetTop + (el.offsetHeight / 2) - window.scrollY
+                const x = rect.x + rect.width
+                const y = rect.y + (rect.height / 2)
                 return { x, y }
             }
             default: {
@@ -145,7 +154,7 @@ class Arrow extends Component {
         return null
     }
 
-    _getCurveOffsets = (el, side, startPoint, endPoint) => {
+    _getCurveOffsets(el, side, startPoint, endPoint) {
         const S = side ? side : 'top'
         let distance = Math.sqrt(Math.pow((endPoint.x - startPoint.x), 2) + Math.pow((endPoint.y - startPoint.y), 2))
         const curveindex = distance * 0.2

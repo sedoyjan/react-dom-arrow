@@ -1,6 +1,6 @@
 {
   "name": "react-dom-arrow",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "react svg arrow from el to el",
   "main": "index.js",
   "scripts": {
@@ -10,5 +10,20 @@
   "license": "ISC",
   "dependencies": {
     "react": "^16.4.2"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sedoyjan/react-dom-arrow.git"
+  },
+  "keywords": [
+    "react",
+    "arrow",
+    "svg",
+    "dom"
+  ],
+  "bugs": {
+    "url": "https://github.com/sedoyjan/react-dom-arrow/issues"
+  },
+  "homepage": "https://github.com/sedoyjan/react-dom-arrow#readme"
 }
